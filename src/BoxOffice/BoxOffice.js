@@ -36,8 +36,8 @@ export default function BoxOffice(){
       let dailyBoxOfficeList = data.boxOfficeResult.dailyBoxOfficeList;
       setOfficeList(
         dailyBoxOfficeList.map((item) => 
-        // <div className="officelist"></div>
         <li key={item.movieCd} className="lis">
+          {/* 해당 영화 정보를 출력하는 페이지로 이동 */}
           <Link to={'/mv?mvcd=' + item.movieCd}>
           <span className="rank">{item.rank}</span>
           <span className="title">{item.movieNm}</span>
@@ -53,6 +53,7 @@ export default function BoxOffice(){
   }
 
   //페이지가 처음 랜더링 되었을 때 실행되는 hook
+  //어제 날짜를 호출해서 url에 입력될 형식으로 변경한 후 
   useEffect(() => {
     const yesterday = new Date();
     yesterday.setDate(new Date().getDate()-1);
@@ -60,6 +61,7 @@ export default function BoxOffice(){
     //state변수 변경
     setviewDay(d) //변경된 d값이 입력되면 재 랜더링... 최초에 mv값이 없다가 setter를 써서 재랜더링
     //떄문에 최초 랜더링에서는 mv값이 없었고 setter를 통해서 재랜더링 된 후 어제 날짜가 출력되는 것
+    //처음 렌더링 될때 viewDayF(h1테그 날짜)가 d의 날짜로 출력될 수 있도록 viewDay를 입력해 주는것
 
     //boxoffice open api call
     getBoxOffice(d);
@@ -68,12 +70,16 @@ export default function BoxOffice(){
   //이벤트 함수
   const handleChange = (e) => {
     e.preventDefault();
+    console.log("refDateIn", refDateIn.current.value)
     setviewDay(refDateIn.current.value.replaceAll('-',''));
+    //달력으로 입력받은 날짜값(refDateIn)를 url에 입력될 viewDay로 변경 (1999-12-31 -> 19991231)
   }
 
   useEffect(()=>{    
     (viewDay && setviewDayF(viewDay.substring(0,4)+'.'+viewDay.substring(4,6)+'.'+viewDay.substring(6,8)));
     getBoxOffice(viewDay);
+    //변경된 viewDay를 매개변수로 getBoxOffice함수 호출
+    //viewDayF : <h1>테그에 입력할 날짜 (1999.12.31)
   },[viewDay])
 
   return(
@@ -86,3 +92,5 @@ export default function BoxOffice(){
     </>
   )
 }
+
+//https://www.daleseo.com/react-refs/

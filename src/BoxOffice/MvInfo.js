@@ -56,7 +56,9 @@ function MvInfo(props) {
     let lis = [];
     for (let [k, v] of Object.entries(myinfo)) {
       lis.push(<li key={myinfo.movieCd + k} className='lis2'>
+        {/* key */}
         <span className='span1'>{k}:</span>
+        {/* value */}
         <span className='span2'>{v}</span></li>);
     }
 

@@ -5,9 +5,17 @@ import qs from 'query-string';
 
 export default function BoxMv() {
   const loc = useLocation().search;
+  //전달된 쿼리스트링을 확인
   const mvcd = qs.parse(loc).mvcd;
+  //쿼리스트링 내용을 파싱하여 오브젝트 생성
 
   const [mv, setMv] = useState();
+
+  //useEffect에서는 async, await 바로 못쓴다.
+  useEffect(() => {
+    getMovie(mvcd);
+    //movieCd값을 매개변수로 getMovie를 호출
+  }, [])
 
   const getMovie = async (mvcd) => {
     let url = 'https://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json?'
@@ -18,19 +26,15 @@ export default function BoxMv() {
     const data = await resp.json();
     
     setMv(data);
-    //setMv를 통해서 랜더링된 후 data 변수에 요청된 영화정보가 담기면 그정보를 MvInfo에 props를 통해서 넘어간다.
-
+    //setMv를 통해서 랜더링된 후 data 변수에 요청된 영화정보가 mv에 담긴다.
   }
-  //useEffect에서는 async, await 바로 못쓴다.
-  useEffect(() => {
-    getMovie(mvcd);
-  }, [])
 
   return (
     <>
       <h1>영화 정보</h1>
       <div>
         {mv && <MvInfo m={mv}/>}
+        {/* 영화정보를 MvInfo에 props를 통해서 넘긴다. */}
       </div>
     </>
   );
