@@ -48,6 +48,7 @@ function MvInfo(props) {
         case 'companys':
           myinfo[keys[k]] = mvinfo[k].filter((item) => item.companyPartNm === '배급사');
           myinfo[keys[k]] = myinfo[keys[k]].map((item) => item.companyNmEn);
+          //companys를 배급사 정보만 필터링해서 회사 이름을 출력
           break;
       }
     }
